@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edge1 Options - Amplify Your Earnings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0077FF', // Brighter ICP blue
+            secondary: '#5E6AD2', // Vibrant purple for ClearDAO
+            accent: '#00E5FF', // Bright teal accent
+            dark: '#0F172A',
+            light: '#F8FAFC',
+            neutral: '#E2E8F0'
+          },
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .orderbook-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 0.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-inter bg-light text-dark antialiased">
+  <!-- Navbar -->
+  <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-md shadow-sm">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <a href="#" class="flex items-center space-x-2">
+            <!--div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-xl">E</div-->
+            <div><img border=0 width=48 src='assets/img/logo.png'></div>
+            <span class="text-xl font-bold text-primary">Edge1</span>
+            <span class="ml-1 text-xs bg-secondary text-white px-2 py-0.5 rounded-full">Options</span>
+          </a>
+        </div>
+        
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex space-x-8">
+          <a href="#features" class="text-dark hover:text-primary transition-colors font-medium">Features</a>
+          <a href="#options" class="text-dark hover:text-primary transition-colors font-medium">Products</a>
+          <a href="#about" class="text-dark hover:text-primary transition-colors font-medium">About</a>
+          <a href="#partners" class="text-dark hover:text-primary transition-colors font-medium">Partners</a>
+          <a href="#faq" class="text-dark hover:text-primary transition-colors font-medium">FAQ</a>
+        </nav>
+        
+        <div class="flex items-center space-x-4">
+          <a href="#features" class="hidden md:inline-block px-5 py-2 rounded-full border border-primary text-primary hover:bg-primary/5 transition-colors font-medium">Learn More</a>
+          <a href="#options" class="px-5 py-2 rounded-full bg-primary text-white hover:bg-primary/90 transition-colors font-medium shadow-md hover:shadow-lg">Get Started</a>
+          <button id="menu-toggle" class="md:hidden text-dark focus:outline-none">
+            <i class="fa fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+      <div class="container mx-auto px-4 py-3 space-y-3">
+        <a href="#features" class="block text-dark hover:text-primary transition-colors font-medium">Features</a>
+        <a href="#options" class="block text-dark hover:text-primary transition-colors font-medium">Options</a>
+        <a href="#about" class="block text-dark hover:text-primary transition-colors font-medium">About</a>
+        <a href="#partners" class="block text-dark hover:text-primary transition-colors font-medium">Partners</a>
+        <a href="#faq" class="block text-dark hover:text-primary transition-colors font-medium">FAQ</a>
+        <a href="#features" class="block text-center px-5 py-2 rounded-full border border-primary text-primary hover:bg-primary/5 transition-colors font-medium mt-2">Learn More</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="pt-32 pb-20 md:pt-40 md:pb-32 bg-gradient-to-br from-primary/10 to-secondary/10">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row items-center">
+        <div class="lg:w-1/2 mb-10 lg:mb-0">
+          <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-dark mb-6">
+            Amplify Your Earnings <br>
+            <span class="text-primary">with Edge1 Options</span>
+          </h1>
+          <p class="text-lg text-gray-600 mb-8 max-w-lg">
+            The first fully decentralized options trading platform on ICP, offering diverse options with order book model.
+          </p>
+          <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <a href="#options" class="px-8 py-3 rounded-full bg-primary text-white text-center hover:bg-primary/90 transition-colors font-medium shadow-lg hover:shadow-primary/20 hover:shadow-xl">
+              Explore Options
+            </a>
+            <a href="#faq" class="px-8 py-3 rounded-full border border-gray-300 text-dark text-center hover:bg-gray-50 transition-colors font-medium">
+              Learn About Options <i class="fa fa-arrow-right ml-2"></i>
+            </a>
+          </div>
+          <div class="mt-10 flex items-center space-x-6">
+            <div class="flex -space-x-2">
+              <img src="assets/img/user01.jpg" alt="User" class="w-10 h-10 rounded-full border-2 border-white">
+              <img src="assets/img/user02.jpg" alt="User" class="w-10 h-10 rounded-full border-2 border-white">
+              <img src="assets/img/user03.jpg" alt="User" class="w-10 h-10 rounded-full border-2 border-white">
+              <div class="w-10 h-10 rounded-full bg-primary/10 border-2 border-white flex items-center justify-center text-primary font-medium text-sm">+2k</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">Trusted by</div>
+              <div class="text-lg font-semibold text-dark">2,000+ Early Users</div>
+            </div>
+          </div>
+        </div>
+        <div class="lg:w-1/2 relative">
+          <div class="relative z-10 bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-gray-100">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="font-semibold text-lg">Trading Interface Preview</h3>
+                <div class="flex space-x-2">
+                  <button class="w-3 h-3 rounded-full bg-red-500"></button>
+                  <button class="w-3 h-3 rounded-full bg-yellow-500"></button>
+                  <button class="w-3 h-3 rounded-full bg-green-500"></button>
+                </div>
+              </div>
+              <div class="h-64">
+                <canvas id="priceChart"></canvas>
+                <div class="absolute inset-0 flex items-center justify-center bg-white/80">
+                  <div class="text-center">
+                    <i class="fa fa-line-chart text-4xl text-primary mb-2"></i>
+                    <p class="text-gray-500">Schematic Data • Coming Soon</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-4">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm text-gray-500">Last Price</span>
+                <span class="font-semibold text-gray-400">N/A</span>
+              </div>
+              <div class="flex justify-between items-center mb-4">
+                <span class="text-sm text-gray-500">24h Change</span>
+                <span class="text-gray-400">-</span>
+              </div>
+              <div class="orderbook-grid">
+                <div class="col-span-6 font-medium text-right pr-2">Bids</div>
+                <div class="col-span-6 font-medium">Asks</div>
+                <div class="col-span-6 text-right pr-2">-</div>
+                <div class="col-span-6">-</div>
+                <div class="col-span-6 text-right pr-2">-</div>
+                <div class="col-span-6">-</div>
+                <div class="col-span-6 text-right pr-2">-</div>
+                <div class="col-span-6">-</div>
+              </div>
+              <div class="text-center mt-4 text-xs text-gray-500">
+                *Schematic interface, real-time data available post-launch
+              </div>
+            </div>
+          </div>
+          <div class="absolute -bottom-6 -right-6 w-40 h-40 bg-accent/20 rounded-full blur-3xl -z-10"></div>
+          <div class="absolute -top-6 -left-6 w-32 h-32 bg-secondary/20 rounded-full blur-3xl -z-10"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-20 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-4">Why Choose Edge1</h2>
+        <p class="text-lg text-gray-600">
+          Experience the next generation of decentralized options trading with advanced features.
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="bg-light rounded-xl p-8 shadow-md hover:shadow-lg transition-shadow group">
+          <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center text-primary text-2xl mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+            <i class="fa fa-shield"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Fully Decentralized</h3>
+          <p class="text-gray-600">
+            All contracts and trading logic on ICP blockchain, eliminating single points of failure.
+          </p>
+        </div>
+        
+        <!-- Feature 2 -->
+        <div class="bg-light rounded-xl p-8 shadow-md hover:shadow-lg transition-shadow group">
+          <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center text-primary text-2xl mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+            <i class="fa fa-calculator"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Professional Pricing</h3>
+          <p class="text-gray-600">
+            Leverages ICP's computing power for traditional finance pricing models.
+          </p>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="bg-light rounded-xl p-8 shadow-md hover:shadow-lg transition-shadow group">
+          <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center text-primary text-2xl mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+            <i class="fa fa-th"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Order Book Trading</h3>
+          <p class="text-gray-600">
+            Professional trading with limit, market, and stop orders for precise execution.
+          </p>
+        </div>
+        
+        <!-- Feature 4 -->
+        <div class="bg-light rounded-xl p-8 shadow-md hover:shadow-lg transition-shadow group">
+          <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center text-primary text-2xl mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+            <i class="fa fa-sliders"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Diverse Option Types</h3>
+          <p class="text-gray-600">
+            Trade European, American, Barrier options and more with customizable terms.
+          </p>
+        </div>
+        
+        <!-- Feature 5 -->
+        <div class="bg-light rounded-xl p-8 shadow-md hover:shadow-lg transition-shadow group">
+          <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center text-primary text-2xl mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+            <i class="fa fa-shield-alt"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Robust Risk Management</h3>
+          <p class="text-gray-600">
+            Combine options with spot trading for hedging, real-time margin monitoring.
+          </p>
+        </div>
+        
+        <!-- Feature 6 -->
+        <div class="bg-light rounded-xl p-8 shadow-md hover:shadow-lg transition-shadow group">
+          <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center text-primary text-2xl mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+            <i class="fa fa-users"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">User-Friendly Interface</h3>
+          <p class="text-gray-600">
+            Intuitive design for beginners and professionals with advanced charting tools.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Options Section -->
+  <section id="options" class="py-20 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-4">Product Series</h2>
+        <p class="text-lg text-gray-600">
+          Our comprehensive suite of trading products
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- DawnPick CFD -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="h-48 bg-primary/10 flex items-center justify-center">
+            <i class="fa fa-line-chart text-5xl text-primary"></i>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-3">DawnPick CFD</h3>
+            <p class="text-gray-600 mb-4">
+              after-hours US stock CFD trading on ICP blockchain
+            </p>
+            <ul class="space-y-2 mb-6">
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>10x Leverage After-Hours Trading</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Fully Decentralized</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Low-Threshold Cold Start</span>
+              </li>
+            </ul>
+            <a href="dawnpick.html" class="inline-block px-4 py-2 rounded-lg border border-primary text-primary hover:bg-primary/5 transition-colors font-medium">Learn More</a>
+          </div>
+        </div>
+
+        <!-- European Options -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="h-48 bg-primary/10 flex items-center justify-center">
+            <i class="fa fa-clock-o text-5xl text-primary"></i>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-3">European Options</h3>
+            <p class="text-gray-600 mb-4">
+              Exercise only at expiration; ideal for long-term hedging and speculation.
+            </p>
+            <ul class="space-y-2 mb-6">
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Fixed expiration date</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Simple pricing model</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Suitable for long-term strategies</span>
+              </li>
+            </ul>
+            <a href="#faq" class="inline-block px-4 py-2 rounded-lg border border-primary text-primary hover:bg-primary/5 transition-colors font-medium">Learn More</a>
+          </div>
+        </div>
+        
+        <!-- American Options -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="h-48 bg-secondary/10 flex items-center justify-center">
+            <i class="fa fa-refresh text-5xl text-secondary"></i>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-3">American Options</h3>
+            <p class="text-gray-600 mb-4">
+              Exercise anytime before expiration, offering maximum flexibility.
+            </p>
+            <ul class="space-y-2 mb-6">
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Exercise flexibility before expiry</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Higher premium due to flexibility</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Ideal for tactical trading</span>
+              </li>
+            </ul>
+            <a href="#faq" class="inline-block px-4 py-2 rounded-lg border border-secondary text-secondary hover:bg-secondary/5 transition-colors font-medium">Learn More</a>
+          </div>
+        </div>
+        
+        <!-- Barrier Options -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="h-48 bg-accent/10 flex items-center justify-center">
+            <i class="fa fa-ban text-5xl text-accent"></i>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-3">Barrier Options</h3>
+            <p class="text-gray-600 mb-4">
+              Expire or activate when underlying price hits a specified barrier.
+            </p>
+            <ul class="space-y-2 mb-6">
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Lower premium than standard options</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Customizable barrier levels</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Perfect for range-bound markets</span>
+              </li>
+            </ul>
+            <a href="#faq" class="inline-block px-4 py-2 rounded-lg border border-accent text-accent hover:bg-accent/5 transition-colors font-medium">Learn More</a>
+          </div>
+        </div>
+        
+        <!-- Binary Options -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="h-48 bg-primary/20 flex items-center justify-center">
+            <i class="fa fa-arrows-alt text-5xl text-primary"></i>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-3">Binary Options</h3>
+            <p class="text-gray-600 mb-4">
+              Fixed payout if condition is met, zero otherwise; ideal for short-term predictions.
+            </p>
+            <ul class="space-y-2 mb-6">
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Fixed payout structure</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Short-term expiry options available</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                <span>Quick market prediction tool</span>
+              </li>
+            </ul>
+            <a href="#faq" class="inline-block px-4 py-2 rounded-lg border border-primary text-primary hover:bg-primary/5 transition-colors font-medium">Learn More</a>
+          </div>
+        </div>
+        
+        <!-- More Options -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="h-48 bg-neutral flex items-center justify-center">
+            <div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center text-primary text-4xl">
+              <i class="fa fa-plus"></i>
+            </div>
+          </div>
+          <div class="p-6 text-center">
+            <h3 class="text-xl font-bold mb-3">More Option Types</h3>
+            <p class="text-gray-600 mb-6">
+              We continuously expand our options matrix to meet professional trading needs.
+            </p>
+            <a href="#features" class="inline-block px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors font-medium">
+              Coming Soon <i class="fa fa-arrow-right ml-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-20 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row items-center gap-12">
+        <div class="lg:w-1/2">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-6">About Edge1</h2>
+          <p class="text-lg text-gray-600 mb-6">
+            Edge1 is a blockchain options platform built on ClearDAO's underlying option contracts, dedicated to professional derivatives trading in the ICP ecosystem.
+          </p>
+          <p class="text-lg text-gray-600 mb-8">
+            Our platform successfully operated on the Ethereum testnet for over six months and now leverages ICP's computing power for fully decentralized options trading.
+          </p>
+          <div class="space-y-4 mb-8">
+            <div class="flex items-start">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-4 flex-shrink-0">
+                <i class="fa fa-check"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold text-lg mb-1">ClearDAO Ecosystem Member</h4>
+                <p class="text-gray-600">Benefiting from ClearDAO's robust derivative infrastructure and community support.</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-4 flex-shrink-0">
+                <i class="fa fa-check"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold text-lg mb-1">ICP Ecosystem Focus</h4>
+                <p class="text-gray-600">Harnessing ICP's unique computing power for advanced financial models on-chain.</p>
+              </div>
+            </div>
+          </div>
+          <a href="#partners" class="inline-block px-6 py-3 rounded-full bg-primary text-white hover:bg-primary/90 transition-colors font-medium shadow-md hover:shadow-lg">
+            Learn About Our Story
+          </a>
+        </div>
+        <div class="lg:w-1/2 relative">
+          <div class="relative z-10">
+            <img src="assets/img/viewp.jpg" alt="Edge1 Team" class="rounded-2xl shadow-2xl">
+            <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-lg max-w-xs">
+              <div class="flex items-center mb-2">
+                <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                  <img src="assets/img/ceo.jpg" alt="CEO" class="w-full h-full object-cover">
+                </div>
+                <div>
+                  <h4 class="font-semibold">Michael Li</h4>
+                  <p class="text-sm text-gray-500">Founder & CEO</p>
+                </di
+              </div>
+              <p class="text-sm text-gray-600">
+                "Edge1 bridges traditional finance with blockchain, bringing professional options trading to the decentralized world."
+              </p>
+            </div>
+          </div>
+          <div class="absolute -top-6 -right-6 w-32 h-32 bg-primary/10 rounded-full blur-3xl -z-10"></div>
+          <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-secondary/10 rounded-full blur-3xl -z-10"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners Section -->
+  <section id="partners" class="py-20 bg-neutral">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-4">Our Partners & Investors</h2>
+        <p class="text-lg text-gray-600">
+          Joined by leading institutions in blockchain and finance industries.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+        <div class="grayscale hover:grayscale-0 transition-all duration-300">
+          <img src="assets/img/partners/p0_clear.png" alt="Partner" class="object-contain">
+        </div>
+        <div class="grayscale hover:grayscale-0 transition-all duration-300">
+          <img src="assets/img/partners/p1.svg" alt="Partner" class="object-contain">
+        </div>
+        <div class="grayscale hover:grayscale-0 transition-all duration-300">
+          <img src="assets/img/partners/p2.svg" alt="Partner" class="object-contain">
+        </div>
+        <div class="grayscale hover:grayscale-0 transition-all duration-300">
+          <img src="assets/img/partners/p3.svg" alt="Partner" class="object-contain">
+        </div>
+        <div class="grayscale hover:grayscale-0 transition-all duration-300">
+          <img src="assets/img/partners/p4.svg" alt="Partner" class="object-contain">
+        </div>
+        <div class="grayscale hover:grayscale-0 transition-all duration-300">
+          <img src="assets/img/partners/p5.svg" alt="Partner" class="object-contain">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="py-20 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-dark mb-4">Frequently Asked Questions</h2>
+        <p class="text-lg text-gray-600">
+          Find answers to common questions about Edge1 and options trading.
+        </p>
+      </div>
+      
+      <div class="max-w-3xl mx-auto">
+        <div class="space-y-6">
+          <!-- FAQ 1 -->
+          <div class="bg-light rounded-xl overflow-hidden">
+            <button class="faq-toggle w-full px-6 py-4 text-left font-semibold flex justify-between items-center">
+              <span>What are options and how do they work?</span>
+              <i class="fa fa-chevron-down text-primary transition-transform"></i>
+            </button>
+            <div class="faq-content px-6 py-0 overflow-hidden max-h-0 transition-all duration-300">
+              <div class="px-6 py-4 border-t">
+                <p class="text-gray-600">
+                  Options are financial derivatives that give the holder the right, but not the obligation, to buy or sell an asset at a specific price in the future. They provide flexible investment choices for strategic trading.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- FAQ 2 -->
+          <div class="bg-light rounded-xl overflow-hidden">
+            <button class="faq-toggle w-full px-6 py-4 text-left font-semibold flex justify-between items-center">
+              <span>How does Edge1 ensure transaction security?</span>
+              <i class="fa fa-chevron-down text-primary transition-transform"></i>
+            </button>
+            <div class="faq-content px-6 py-0 overflow-hidden max-h-0 transition-all duration-300">
+              <div class="px-6 py-4 border-t">
+                <p class="text-gray-600">
+                  Edge1 uses advanced encryption and smart contract technology, undergoing rigorous security audits to protect user assets and transaction data in a decentralized environment.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- FAQ 3 -->
+          <div class="bg-light rounded-xl overflow-hidden">
+            <button class="faq-toggle w-full px-6 py-4 text-left font-semibold flex justify-between items-center">
+              <span>What advantages do Edge1 options have over similar products?</span>
+              <i class="fa fa-chevron-down text-primary transition-transform"></i>
+            </button>
+            <div class="faq-content px-6 py-0 overflow-hidden max-h-0 transition-all duration-300">
+              <div class="px-6 py-4 border-t">
+                <p class="text-gray-600">
+                  Edge1 is fully decentralized on ICP with professional financial pricing models, avoiding simplifications seen in other ecosystems, and offers a complete options product matrix.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- FAQ 4 -->
+          <div class="bg-light rounded-xl overflow-hidden">
+            <button class="faq-toggle w-full px-6 py-4 text-left font-semibold flex justify-between items-center">
+              <span>Why build on the ICP chain?</span>
+              <i class="fa fa-chevron-down text-primary transition-transform"></i>
+            </button>
+            <div class="faq-content px-6 py-0 overflow-hidden max-h-0 transition-all duration-300">
+              <div class="px-6 py-4 border-t">
+                <p class="text-gray-600">
+                  ICP offers exceptional computing power and performance for complex financial models, with a rapidly growing ecosystem aligned with Edge1's vision of open, decentralized finance.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- FAQ 5 -->
+          <div class="bg-light rounded-xl overflow-hidden">
+            <button class="faq-toggle w-full px-6 py-4 text-left font-semibold flex justify-between items-center">
+              <span>What types of options does Edge1 support?</span>
+              <i class="fa fa-chevron-down text-primary transition-transform"></i>
+            </button>
+            <div class="faq-content px-6 py-0 overflow-hidden max-h-0 transition-all duration-300">
+              <div class="px-6 py-4 border-t">
+                <p class="text-gray-600">
+                  Edge1 supports European, American, Barrier, and Binary options, with plans to continuously expand our product line to meet diverse trading strategies.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-primary text-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-6">Join the Edge1 Community</h2>
+      <p class="text-lg text-white/80 max-w-2xl mx-auto mb-8">
+        Be the first to know about our launch, get exclusive offers, and access professional trading insights.
+      </p>
+      <form class="max-w-lg mx-auto flex flex-col sm:flex-row gap-4">
+        <input type="email" placeholder="Your email address" class="flex-1 px-6 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-white/50 text-dark">
+        <button type="submit" class="px-8 py-3 rounded-full bg-white text-primary font-medium hover:bg-white/90 transition-colors shadow-lg hover:shadow-xl">
+          Subscribe
+        </button>
+      </form>
+      <p class="text-sm text-white/60 mt-4">
+        By subscribing, you agree to our Privacy Policy and Terms of Service.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white pt-16 pb-8">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div>
+          <div class="flex items-center space-x-2 mb-6">
+            <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-primary font-bold text-xl">E</div>
+            <span class="text-xl font-bold text-white">Edge1</span>
+            <span class="ml-1 text-xs bg-secondary text-white px-2 py-0.5 rounded-full">ClearDAO</span>
+          </div>
+          <p class="text-gray-400 mb-6">
+            Leading decentralized options trading platform on ICP, bringing professional finance to blockchain.
+          </p>
+          <div class="flex space-x-4">
+            <a href="https://x.com/Edge1Options" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+              <i class="fa fa-twitter text-white"></i>
+            </a>
+            <!--a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+              <i class="fa fa-telegram text-white"></i>
+            </a-->
+            <a href="https://discord.gg/6RPkxqB2Mf" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+              <i class="fa fa-discord text-white"></i>
+            </a>
+            <a href="https://medium.com/@edge1options" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+              <i class="fa fa-medium text-white"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-6">Products</h4>
+          <ul class="space-y-3">
+            <li><a href="#options" class="text-gray-400 hover:text-white transition-colors">European Options</a></li>
+            <li><a href="#options" class="text-gray-400 hover:text-white transition-colors">American Options</a></li>
+            <li><a href="#options" class="text-gray-400 hover:text-white transition-colors">Barrier Options</a></li>
+            <li><a href="#options" class="text-gray-400 hover:text-white transition-colors">Binary Options</a></li>
+            <li><a href="#features" class="text-gray-400 hover:text-white transition-colors">Trading Tools</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-6">Resources</h4>
+          <ul class="space-y-3">
+            <li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">Options Guide</a></li>
+            <li><a href="#features" class="text-gray-400 hover:text-white transition-colors">Risk Management</a></li>
+            <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">Market Analysis</a></li>
+            <li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">API Documentation</a></li>
+            <li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-6">Company</h4>
+          <ul class="space-y-3">
+            <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+            <li><a href="#partners" class="text-gray-400 hover:text-white transition-colors">Team</a></li>
+            <li><a href="#partners" class="text-gray-400 hover:text-white transition-colors">Partners</a></li>
+            <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">Careers</a></li>
+            <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-400 text-sm mb-4 md:mb-0">
+          &copy; 2025 Edge1 Options. All rights reserved.
+        </p>
+        <!--div class="flex space-x-6">
+          <a href="#faq" class="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
+          <a href="#faq" class="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</a>
+          <a href="#faq" class="text-gray-400 hover:text-white text-sm transition-colors">Cookie Policy</a>
+        </div-->
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('shadow-md');
+        navbar.classList.remove('shadow-sm');
+      } else {
+        navbar.classList.remove('shadow-md');
+        navbar.classList.add('shadow-sm');
+      }
+    });
+    
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      if (mobileMenu.classList.contains('hidden')) {
+        menuToggle.innerHTML = '<i class="fa fa-bars text-2xl"></i>';
+      } else {
+        menuToggle.innerHTML = '<i class="fa fa-times text-2xl"></i>';
+      }
+    });
+    
+    // FAQ toggle
+    const faqToggles = document.querySelectorAll('.faq-toggle');
+    faqToggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const content = toggle.nextElementSibling;
+        const icon = toggle.querySelector('i');
+        
+        // Toggle current FAQ
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+          icon.style.transform = 'rotate(0deg)';
+        } else {
+          content.style.maxHeight = content.scrollHeight + 'px';
+          icon.style.transform = 'rotate(180deg)';
+        }
+        
+        // Close other FAQs
+        faqToggles.forEach(otherToggle => {
+          if (otherToggle !== toggle) {
+            const otherContent = otherToggle.nextElementSibling;
+            const otherIcon = otherToggle.querySelector('i');
+            otherContent.style.maxHeight = null;
+            otherIcon.style.transform = 'rotate(0deg)';
+          }
+        });
+      });
+    });
+    
+    // Price chart (schematic)
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    const priceChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+        datasets: [{
+          label: 'Underlying Index',
+          data: [1000, 1200, 1100, 1300, 1250, 1400, 1350, 1500, 1450],
+          borderColor: '#0077FF',
+          backgroundColor: 'rgba(0, 119, 255, 0.1)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            min: 800,
+            max: 1800,
+            ticks: {
+              stepSize: 200
+            }
+          }
+        }
+      }
+    });
+    
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+          
+          // Close mobile menu
+          if (!mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+            menuToggle.innerHTML = '<i class="fa fa-bars text-2xl"></i>';
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

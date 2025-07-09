@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DawnPick - Decentralized CFD Trading Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0077FF',
+            secondary: '#36CFC9',
+            accent: '#722ED1',
+            dark: '#0F172A',
+            'gray-blue': '#1E293B'
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif']
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-glow {
+        text-shadow: 0 0 10px rgba(0, 119, 255, 0.7);
+      }
+      .bg-grid {
+        background-image: 
+          linear-gradient(rgba(0, 119, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 119, 255, 0.05) 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 119, 255, 0.2);
+      }
+      .neon-border {
+        position: relative;
+        overflow: hidden;
+      }
+      .neon-border::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, #0077FF, #36CFC9);
+        z-index: -1;
+        filter: blur(10px);
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+      .neon-border:hover::after {
+        opacity: 0.5;
+      }
+    }
+  </style>
+</head>
+<body class="font-inter bg-dark text-white overflow-x-hidden">
+  <!-- Navigation Bar -->
+  <nav class="fixed w-full z-50 transition-all duration-300 bg-dark/80 backdrop-blur-md">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+          <i class="fa fa-line-chart text-white"></i>
+        </div>
+        <span class="text-xl font-bold text-white">DawnPick</span>
+      </div>
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#features" class="text-gray-300 hover:text-white transition-colors">Features</a>
+        <a href="#cfd-advantages" class="text-gray-300 hover:text-white transition-colors">CFD Advantages</a>
+        <a href="#rwa-advantages" class="text-gray-300 hover:text-white transition-colors">RWA Advantages</a>
+        <a href="#process" class="text-gray-300 hover:text-white transition-colors">Trading Process</a>
+        <a href="#security" class="text-gray-300 hover:text-white transition-colors">Security</a>
+        <a href="#contact" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button class="hidden md:block px-5 py-2 bg-primary rounded-full text-white hover:bg-primary/90 transition-all">
+          Start Trading
+        </button>
+        <button class="md:hidden text-white" id="menu-toggle">
+          <i class="fa fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+ <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-grid">
+    <div class="absolute inset-0 bg-dark/70 z-10"></div>
+    <div class="absolute inset-0 z-0">
+      <div class="w-full h-full" id="chart-container"></div>
+    </div>
+    <div class="container mx-auto px-4 relative z-20 text-center">
+      <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold mb-6 leading-tight">
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">DawnPick</span>
+        <br>Decentralized CFD Trading Platform
+      </h1>
+      <p class="text-[clamp(1rem,2vw,1.25rem)] text-gray-200 max-w-2xl mx-auto mb-10">
+        10x Leverage After-Hours CFD Trading on ICP Chain. Your funds, fully under your control.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button class="px-8 py-4 bg-gradient-to-r from-primary to-secondary rounded-full text-white font-bold text-lg hover:opacity-90 transition-all transform hover:scale-105 shadow-lg">
+          Join Beta Waitlist <i class="fa fa-arrow-right ml-2"></i>
+        </button>
+        <button class="px-8 py-4 bg-transparent border-2 border-white/30 rounded-full text-white font-bold text-lg hover:bg-white/10 transition-all">
+          Learn About RWA <i class="fa fa-book ml-2"></i>
+        </button>
+      </div>
+      <div class="mt-16 flex flex-wrap justify-center gap-8">
+        <div class="text-center">
+          <div class="text-3xl font-bold text-primary mb-2" id="trade-count">0</div>
+          <div class="text-gray-400">RWA Trades</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-secondary mb-2" id="user-count">0</div>
+          <div class="text-gray-400">Edge1 Users</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-accent mb-2" id="success-rate">0%</div>
+          <div class="text-gray-400">Settlement Accuracy</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-20 bg-dark relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">Core Features</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">Redefining CFD trading experience with ICP chain technology</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Feature Card 1 -->
+        <div class="bg-gray-blue/30 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-bolt text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">10x Leverage After-Hours Trading</h3>
+          <p class="text-gray-400">Fill the gap after U.S. stock market closes. Trade popular stocks like Tesla and Apple with 10x leverage. Trading stops 30 minutes before market opens for automatic settlement.</p>
+        </div>
+        <!-- Feature Card 2 -->
+        <div class="bg-gray-blue/30 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-shield text-2xl text-secondary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Fully Decentralized</h3>
+          <p class="text-gray-400">Your funds stay in your wallet. All trades are executed by smart contracts, eliminating centralized custody risks. Truly embodying the "Code is Law" principle of the ICP chain.</p>
+        </div>
+        <!-- Feature Card 3 -->
+        <div class="bg-gray-blue/30 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-users text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Low-Threshold Cold Start</h3>
+          <p class="text-gray-400">Get free USDe test tokens to experience the trading process with zero cost. Invite friends to earn trading fee rebates.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CFD Advantages Section -->
+  <section id="cfd-advantages" class="py-20 bg-gray-blue relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">Core Advantages of CFD Trading</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">Trade both long and short, amplify your returns with leverage, no need to own the underlying asset</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Advantage Card 1 -->
+        <div class="bg-dark/50 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-expand text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Leveraged Trading</h3>
+          <p class="text-gray-400">10x leverage amplifies your profit potential. Control a $10,000 position with just $1,000 in margin, maximizing your capital efficiency.</p>
+        </div>
+        <!-- Advantage Card 2 -->
+        <div class="bg-dark/50 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-random text-2xl text-secondary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Profit from Both Directions</h3>
+          <p class="text-gray-400">Trade long (up) or short (down) to profit from both rising and falling markets. Flexibility to adapt to any market condition.</p>
+        </div>
+        <!-- Advantage Card 3 -->
+        <div class="bg-dark/50 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-object-ungroup text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">No Ownership Required</h3>
+          <p class="text-gray-400">Trade CFDs without owning the underlying assets (stocks, commodities, etc.), eliminating holding costs such as storage and management fees.</p>
+        </div>
+        <!-- Advantage Card 4 -->
+        <div class="bg-dark/50 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-th text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Diverse Asset Classes</h3>
+          <p class="text-gray-400">Trade stocks, forex, indices, and more all in one platform. Access a wide range of markets with a single account.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Trading Process Section -->
+  <section id="process" class="py-20 bg-dark relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">CFD Trading Process</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">5 simple steps to start your CFD trading journey on the blockchain</p>
+      </div>
+      <div class="relative">
+        <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 bg-primary/30 transform -translate-x-1/2"></div>
+        <div class="space-y-16 md:space-y-0">
+          <!-- Step 1: Open Position -->
+          <div class="flex flex-col md:flex-row items-center md:items-start">
+            <div class="md:w-1/2 md:pr-12 md:text-right mb-8 md:mb-0">
+              <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto md:mx-0">1</div>
+              <h3 class="text-xl font-bold mt-4 text-white">Choose Direction</h3>
+              <p class="text-gray-400 mt-2">
+                Predict the price movement:<br>
+                <span class="text-primary">Buy</span> (price up) or <span class="text-secondary">Sell</span> (price down)
+              </p>
+              <p class="text-gray-400 mt-2">
+                <i class="fa fa-info-circle text-accent mr-1"></i>
+                CFDs allow you to speculate on price movements without owning the underlying asset
+              </p>
+            </div>
+            <div class="md:w-4 md:hidden h-full bg-primary/30"></div>
+            <div class="md:w-1/2 md:pl-12">
+              <div class="bg-gray-blue/20 backdrop-blur-sm rounded-xl p-6">
+                <div class="flex items-center mb-4">
+                  <div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center mr-4">
+                    <i class="fa fa-arrow-up text-primary"></i>
+                  </div>
+                  <h4 class="text-lg font-bold text-white">Buy Example: Tesla</h4>
+                </div>
+                <p class="text-gray-300 text-sm">
+                  If Tesla closes at $250 and you predict it will rise, you buy 1 CFD contract (equivalent to 1 share) at $250. This requires a margin of $25 USDe (10% leverage).
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 2: Margin Deposit -->
+          <div class="flex flex-col md:flex-row-reverse items-center md:items-start">
+            <div class="md:w-1/2 md:pl-12 md:text-left mb-8 md:mb-0">
+              <div class="w-14 h-14 bg-secondary rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto md:mx-0">2</div>
+              <h3 class="text-xl font-bold mt-4 text-white">Deposit Margin</h3>
+              <p class="text-gray-400 mt-2">
+                Deposit margin according to the leverage ratio (10% = 10x leverage)<br>
+                The required funds are automatically calculated and locked
+              </p>
+              <p class="text-gray-400 mt-2">
+                <i class="fa fa-exclamation-triangle text-accent mr-1"></i>
+                Leverage amplifies both profits and losses. Please manage your position size carefully.
+              </p>
+            </div>
+            <div class="md:w-4 md:hidden h-full bg-secondary/30"></div>
+            <div class="md:w-1/2 md:pr-12">
+              <div class="bg-gray-blue/20 backdrop-blur-sm rounded-xl p-6">
+                <div class="flex items-center mb-4">
+                  <div class="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center mr-4">
+                    <i class="fa fa-lock text-secondary"></i>
+                  </div>
+                  <h4 class="text-lg font-bold text-white">Margin Calculation</h4>
+                </div>
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span class="text-gray-300">Contract Value</span>
+                    <span class="text-white">$250 USDe</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-300">Leverage</span>
+                    <span class="text-white">10x</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-300">Margin Ratio</span>
+                    <span class="text-white">10%</span>
+                  </div>
+                  <div class="flex justify-between border-t border-gray-700 pt-2 mt-2">
+                    <span class="text-gray-300 font-bold">Required Margin</span>
+                    <span class="text-white font-bold">$25 USDe</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 3: Hold & Close -->
+          <div class="flex flex-col md:flex-row items-center md:items-start">
+            <div class="md:w-1/2 md:pr-12 md:text-right mb-8 md:mb-0">
+              <div class="w-14 h-14 bg-accent rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto md:mx-0">3</div>
+              <h3 class="text-xl font-bold mt-4 text-white">Hold or Close Position</h3>
+              <p class="text-gray-400 mt-2">
+                Hold the contract until automatic settlement before next market open, or close manually anytime<br>
+                Profit or loss is calculated based on the difference between closing and opening prices
+              </p>
+              <p class="text-gray-400 mt-2">
+                <i class="fa fa-clock-o text-accent mr-1"></i>
+                Trading stops 15 minutes after market close and resumes 30 minutes before next open
+              </p>
+            </div>
+            <div class="md:w-4 md:hidden h-full bg-accent/30"></div>
+            <div class="md:w-1/2 md:pl-12">
+              <div class="bg-gray-blue/20 backdrop-blur-sm rounded-xl p-6">
+                <div class="flex items-center mb-4">
+                  <div class="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center mr-4">
+                    <i class="fa fa-calendar-check-o text-accent"></i>
+                  </div>
+                  <h4 class="text-lg font-bold text-white">Settlement Example</h4>
+                </div>
+                <p class="text-gray-300 text-sm">
+                  If Tesla opens at $260 the next day, your profit for a long position would be:<br>
+                  ($260 - $250) × 1 share = $10 USDe (40% return)<br>
+                  If the price drops to $240, your loss would be:<br>
+                  ($250 - $240) × 1 share = $10 USDe (40% loss)
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 4: Profit/Loss Settlement -->
+          <div class="flex flex-col md:flex-row-reverse items-center md:items-start">
+            <div class="md:w-1/2 md:pl-12 md:text-left mb-8 md:mb-0">
+              <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto md:mx-0">4</div>
+              <h3 class="text-xl font-bold mt-4 text-white">Smart Contract Settlement</h3>
+              <p class="text-gray-400 mt-2">
+                Automatically calculate profit/loss and return margin upon settlement<br>
+                Profits are credited to your wallet, losses are deducted from margin
+              </p>
+              <p class="text-gray-400 mt-2">
+                <i class="fa fa-check-circle text-green-500 mr-1"></i>
+                All settlements are recorded on-chain, transparent and immutable
+              </p>
+            </div>
+            <div class="md:w-4 md:hidden h-full bg-primary/30"></div>
+            <div class="md:w-1/2 md:pr-12">
+              <div class="bg-gray-blue/20 backdrop-blur-sm rounded-xl p-6">
+                <div class="flex items-center mb-4">
+                  <div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center mr-4">
+                    <i class="fa fa-calculator text-primary"></i>
+                  </div>
+                  <h4 class="text-lg font-bold text-white">Profit Calculation</h4>
+                </div>
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span class="text-gray-300">Opening Price</span>
+                    <span class="text-white">$250 USDe</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-300">Closing Price</span>
+                    <span class="text-white">$260 USDe</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-300">Price Change</span>
+                    <span class="text-green-500">+$10 USDe</span>
+                  </div>
+                  <div class="flex justify-between border-t border-gray-700 pt-2 mt-2">
+                    <span class="text-gray-300 font-bold">Contract Profit</span>
+                    <span class="text-green-500 font-bold">+$10 USDe</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-300 font-bold">Margin Return</span>
+                    <span class="text-white font-bold">$25 USDe</span>
+                  </div>
+                  <div class="flex justify-between border-t border-gray-700 pt-2 mt-2">
+                    <span class="text-gray-300 font-bold">Total to Wallet</span>
+                    <span class="text-green-500 font-bold">$35 USDe</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 5: Withdraw Funds -->
+          <div class="flex flex-col md:flex-row items-center md:items-start">
+            <div class="md:w-1/2 md:pr-12 md:text-right mb-8 md:mb-0">
+              <div class="w-14 h-14 bg-secondary rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto md:mx-0">5</div>
+              <h3 class="text-xl font-bold mt-4 text-white">Withdraw Funds</h3>
+              <p class="text-gray-400 mt-2">
+                Funds are available immediately after settlement<br>
+                Withdraw USDe to your wallet at any time
+              </p>
+              <p class="text-gray-400 mt-2">
+                <i class="fa fa-unlock-alt text-accent mr-1"></i>
+                No withdrawal fees. Complete control over your funds.
+              </p>
+            </div>
+            <div class="md:w-4 md:hidden h-full bg-secondary/30"></div>
+            <div class="md:w-1/2 md:pl-12">
+              <div class="bg-gray-blue/20 backdrop-blur-sm rounded-xl p-6">
+                <div class="flex items-center mb-4">
+                  <div class="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center mr-4">
+                    <i class="fa fa-exchange text-secondary"></i>
+                  </div>
+                  <h4 class="text-lg font-bold text-white">Withdrawal Process</h4>
+                </div>
+                <ol class="list-decimal list-inside text-gray-300 text-sm space-y-2">
+                  <li>Click "Withdraw" button</li>
+                  <li>Enter withdrawal amount</li>
+                  <li>Confirm transaction signature</li>
+                  <li>USDe is instantly transferred to your wallet</li>
+                  <li>Convert to ICP or other digital assets</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- RWA Advantages Section -->
+  <section id="rwa-advantages" class="py-20 bg-gray-blue relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">RWA Trading Advantages</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">Bridging traditional finance with blockchain technology</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="bg-dark/50 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-link text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Onchain RWAs</h3>
+          <p class="text-gray-400">Access traditional assets on ICP chain. Trade stocks as RWAs with blockchain transparency.</p>
+        </div>
+        <div class="bg-dark/50 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-globe text-2xl text-secondary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Global Access</h3>
+          <p class="text-gray-400">Trade U.S. stocks from anywhere. No traditional brokerage restrictions, 24/7 market access.</p>
+        </div>
+        <div class="bg-dark/50 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-lock text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Asset Backed</h3>
+          <p class="text-gray-400">CFDs backed by real-world stock prices. Direct price correlation with underlying assets.</p>
+        </div>
+        <div class="bg-dark/50 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-exchange text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Seamless Liquidity</h3>
+          <p class="text-gray-400">Deep liquidity through Edge1's RWA infrastructure. Smooth trading with minimal slippage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Security Section -->
+  <section id="security" class="py-20 bg-dark relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">Security & Compliance</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">Multiple layers of security to ensure a reliable and compliant trading environment</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Security Card 1 -->
+        <div class="bg-gray-blue/30 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-lock text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Smart Contract Audits</h3>
+          <p class="text-gray-400">Passed dual audits by CertiK and SlowMist. Audit reports are publicly available, ensuring secure and漏洞-free contract code.</p>
+        </div>
+        <!-- Security Card 2 -->
+        <div class="bg-gray-blue/30 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-shield text-2xl text-secondary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Emergency Response</h3>
+          <p class="text-gray-400">Deployed "emergency pause" module that can be triggered by more than 2/3 of the team members under extreme circumstances to protect user funds.</p>
+        </div>
+        <!-- Security Card 3 -->
+        <div class="bg-gray-blue/30 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border">
+          <div class="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-globe text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-white">Compliance Geofencing</h3>
+          <p class="text-gray-400">Smart contracts include built-in geolocation recognition to automatically block access from users in regulatory-sensitive regions such as the United States and China.</p>
+        </div>
+      </div>
+      
+      <div class="mt-20">
+        <div class="bg-gray-blue/20 backdrop-blur-sm rounded-2xl p-8">
+          <h3 class="text-2xl font-bold mb-6 text-center">Audit Partners</h3>
+          <div class="flex flex-wrap justify-center items-center gap-12">
+            <div class="text-gray-400 opacity-70 hover:opacity-100 transition-opacity">
+              <i class="fa fa-certificate text-5xl"></i>
+              <p class="text-center mt-2">CertiK</p>
+            </div>
+            <div class="text-gray-400 opacity-70 hover:opacity-100 transition-opacity">
+              <i class="fa fa-shield text-5xl"></i>
+              <p class="text-center mt-2">VelintSec</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wallets Section -->
+  <section id="wallets" class="py-20 bg-gray-blue relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">Wallet Ecosystem</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">Multi-wallet support for all user preferences</p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Wallet Card 1: Internet Identity -->
+        <div class="bg-dark/50 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border relative overflow-hidden">
+          <div class="absolute top-0 right-0 bg-primary/90 text-dark text-xs font-bold px-3 py-1 rounded-bl-lg">
+            KEYLESS
+          </div>
+          <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-id-card text-3xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold text-center mb-2 text-primary">Internet Identity</h3>
+          <p class="text-gray-300 text-center mb-6">
+            Exclusive for ICP neuron holders. Log in directly through your Dfinity account without managing private keys.
+          </p>
+          <div class="grid grid-cols-2 gap-2 text-sm text-gray-400">
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> Keyless Login
+            </div>
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> Neuron Integration
+            </div>
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> Non-Crypto Natives
+            </div>
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> One-Click Authorization
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Wallet Card 2: Plug Wallet -->
+        <div class="bg-dark/50 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border relative overflow-hidden">
+          <div class="absolute top-0 right-0 bg-secondary/90 text-dark text-xs font-bold px-3 py-1 rounded-bl-lg">
+            FULL-FEATURED
+          </div>
+          <div class="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-plug text-3xl text-secondary"></i>
+          </div>
+          <h3 class="text-xl font-bold text-center mb-2 text-secondary">Plug Wallet</h3>
+          <p class="text-gray-300 text-center mb-6">
+            Browser extension and mobile app supporting USDe transfers and high-frequency smart contract interactions.
+          </p>
+          <div class="grid grid-cols-2 gap-2 text-sm text-gray-400">
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> Extension/Mobile
+            </div>
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> High-Frequency Trading
+            </div>
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> Full Functionality
+            </div>
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> Professional Traders
+            </div>
+          </div>
+        </div>
+        
+        <!-- Wallet Card 3: Oisy Wallet -->
+        <div class="bg-dark/50 backdrop-blur-sm rounded-2xl p-8 card-hover neon-border relative overflow-hidden">
+          <div class="absolute top-0 right-0 bg-accent/90 text-dark text-xs font-bold px-3 py-1 rounded-bl-lg">
+            BEGINNER-FRIENDLY
+          </div>
+          <div class="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-bolt text-3xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold text-center mb-2 text-accent">Oisy Wallet</h3>
+          <p class="text-gray-300 text-center mb-6">
+            Minimalist UI design with integrated DawnPick entry. New users can complete trading流程 in just a few steps.
+          </p>
+          <div class="grid grid-cols-2 gap-2 text-sm text-gray-400">
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> Minimalist Design
+            </div>
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> Onboarding Wizard
+            </div>
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> One-Click USDe Claim
+            </div>
+            <div class="bg-dark/50 p-3 rounded-lg">
+              <i class="fa fa-check text-accent mr-1"></i> Three-Step Quick Start
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Dashboard Section -->
+  <section class="py-20 bg-dark relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">Live Data Dashboard(demo)</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">Real-time platform metrics</p>
+      </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="bg-gray-blue/30 backdrop-blur-sm rounded-xl p-6 card-hover">
+          <p class="text-gray-400 text-sm mb-1">Total Trades</p>
+          <p class="text-3xl font-bold text-primary" id="total-trades">0</p>
+        </div>
+        <div class="bg-gray-blue/30 backdrop-blur-sm rounded-xl p-6 card-hover">
+          <p class="text-gray-400 text-sm mb-1">Active Users</p>
+          <p class="text-3xl font-bold text-secondary" id="active-users">0</p>
+        </div>
+        <div class="bg-gray-blue/30 backdrop-blur-sm rounded-xl p-6 card-hover">
+          <p class="text-gray-400 text-sm mb-1">Trading Volume</p>
+          <p class="text-3xl font-bold text-accent" id="trading-volume">$0</p>
+        </div>
+        <div class="bg-gray-blue/30 backdrop-blur-sm rounded-xl p-6 card-hover">
+          <p class="text-gray-400 text-sm mb-1">Average Return</p>
+          <p class="text-3xl font-bold text-green-500" id="avg-return">0%</p>
+        </div>
+      </div>
+      
+      <div class="mt-12 bg-gray-blue/20 backdrop-blur-sm rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-6 text-center">Popular Trading Instruments</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th class="py-3 px-4 text-left text-gray-400">Instrument</th>
+                <th class="py-3 px-4 text-left text-gray-400">Long/Short Ratio</th>
+                <th class="py-3 px-4 text-left text-gray-400">Predicted Win Rate</th>
+                <th class="py-3 px-4 text-left text-gray-400">Average Return</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t border-gray-700">
+                <td class="py-3 px-4">Tesla (TSLA)</td>
+                <td class="py-3 px-4">
+                  <div class="w-full bg-gray-700 rounded-full h-2">
+                    <div class="bg-primary h-2 rounded-full" style="width: 65%"></div>
+                  </div>
+                  <div class="text-xs text-gray-400 mt-1">Long:Short = 65%:35%</div>
+                </td>
+                <td class="py-3 px-4 text-green-500">72%</td>
+                <td class="py-3 px-4 text-green-500">38%</td>
+              </tr>
+              <tr class="border-t border-gray-700">
+                <td class="py-3 px-4">Apple (AAPL)</td>
+                <td class="py-3 px-4">
+                  <div class="w-full bg-gray-700 rounded-full h-2">
+                    <div class="bg-primary h-2 rounded-full" style="width: 45%"></div>
+                  </div>
+                  <div class="text-xs text-gray-400 mt-1">Long:Short = 45%:55%</div>
+                </td>
+                <td class="py-3 px-4 text-green-500">68%</td>
+                <td class="py-3 px-4 text-green-500">32%</td>
+              </tr>
+              <tr class="border-t border-gray-700">
+                <td class="py-3 px-4">NVIDIA (NVDA)</td>
+                <td class="py-3 px-4">
+                  <div class="w-full bg-gray-700 rounded-full h-2">
+                    <div class="bg-primary h-2 rounded-full" style="width: 78%"></div>
+                  </div>
+                  <div class="text-xs text-gray-400 mt-1">Long:Short = 78%:22%</div>
+                </td>
+                <td class="py-3 px-4 text-green-500">81%</td>
+                <td class="py-3 px-4 text-green-500">45%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-20 bg-gray-blue relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">Frequently Asked Questions</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">Answers to common questions about CFD trading</p>
+      </div>
+      
+      <div class="max-w-3xl mx-auto space-y-6">
+        <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-6 text-left focus:outline-none">
+            <span class="font-bold text-lg">What is decentralized CFD trading?</span>
+            <i class="fa fa-chevron-down text-gray-400 transition-transform"></i>
+          </button>
+          <div class="faq-content px-6 pb-6 hidden">
+            <p class="text-gray-400">
+              Decentralized CFD trading refers to差价合约交易 implemented through blockchain smart contracts, eliminating the need for a centralized platform to hold funds. On the DawnPick platform, all trading logic is automatically executed by smart contracts. User funds are stored in their own wallets and only interact with the platform via smart contracts during trades, greatly enhancing fund security.
+            </p>
+          </div>
+        </div>
+        
+        <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-6 text-left focus:outline-none">
+            <span class="font-bold text-lg">What are the risks of CFD trading?</span>
+            <i class="fa fa-chevron-down text-gray-400 transition-transform"></i>
+          </button>
+          <div class="faq-content px-6 pb-6 hidden">
+            <p class="text-gray-400">
+              CFD trading involves significant risks, including:<br>
+              1. Leverage Risk: 10x leverage can amplify losses by 10 times<br>
+              2. Market Risk: Underlying asset price fluctuations may result in losses<br>
+              3. Liquidity Risk: Difficulty closing positions during extreme market conditions<br>
+              <span class="text-red-500">Recommendation: Start with small trades, set stop-loss orders, and limit position size to no more than 20% of total capital.</span>
+            </p>
+          </div>
+        </div>
+        
+        <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-6 text-left focus:outline-none">
+            <span class="font-bold text-lg">How are CFD profits and losses calculated?</span>
+            <i class="fa fa-chevron-down text-gray-400 transition-transform"></i>
+          </button>
+          <div class="faq-content px-6 pb-6 hidden">
+            <p class="text-gray-400">
+              Profit/Loss Calculation Formulas:<br>
+              Long Position Profit = (Closing Price - Opening Price) × Contract Quantity<br>
+              Short Position Profit = (Opening Price - Closing Price) × Contract Quantity<br>
+              <br>
+              Example: Going long 1 Tesla CFD at $250 and closing at $260 yields (260-250)×1=$10 profit. If the closing price is $240, the loss is $10.
+            </p>
+          </div>
+        </div>
+        
+        <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-6 text-left focus:outline-none">
+            <span class="font-bold text-lg">What is USDe and how do I obtain it?</span>
+            <i class="fa fa-chevron-down text-gray-400 transition-transform"></i>
+          </button>
+          <div class="faq-content px-6 pb-6 hidden">
+            <p class="text-gray-400">
+              USDe is a stablecoin issued on the ICP blockchain, pegged 1:1 to the US dollar. During the test phase, users can obtain USDe through the following methods:<br>
+              1. Receive a test allocation after registration (500 USDe)<br>
+              2. Invite friends to earn rewards (100 USDe per successful referral)<br>
+              3. Participate in platform activities<br>
+              <br>
+              After the mainnet launch, USDe can be obtained by exchanging ICP or transferring from other major stablecoins via cross-chain bridges.
+            </p>
+          </div>
+        </div>
+        
+        <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-6 text-left focus:outline-none">
+            <span class="font-bold text-lg">How is fund security ensured?</span>
+            <i class="fa fa-chevron-down text-gray-400 transition-transform"></i>
+          </button>
+          <div class="faq-content px-6 pb-6 hidden">
+            <p class="text-gray-400">
+              DawnPick ensures fund security through the following measures:<br>
+              1. Smart contracts audited by both CertiK and SlowMist<br>
+              2. Funds stored in user wallets, platform has no direct access<br>
+              3. On-chain transactions are transparent and traceable<br>
+              4. "Emergency pause" mechanism for extreme market conditions<br>
+              5. Cold/hot wallet separation, majority of funds stored in cold wallets
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-20 bg-dark relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">Contact Us</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">Have questions or suggestions? We're here to help</p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="bg-gray-blue/30 backdrop-blur-sm rounded-2xl p-8 mb-8">
+            <h3 class="text-xl font-bold mb-6 text-white">Contact Information</h3>
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">
+                  <i class="fa fa-envelope text-primary"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-white">Email</h4>
+                  <p class="text-gray-400">support@dawnpick.com</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div class="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">
+                  <i class="fa fa-telegram text-secondary"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-white">Telegram</h4>
+                  <p class="text-gray-400">@dawnpick_official</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div class="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">
+                  <i class="fa fa-discord text-accent"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-white">Discord</h4>
+                  <p class="text-gray-400">DawnPick Community</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-blue/30 backdrop-blur-sm rounded-2xl p-8">
+            <h3 class="text-xl font-bold mb-6 text-white">Subscribe to Updates</h3>
+            <p class="text-gray-400 mb-6">Subscribe to our newsletter for the latest product updates and announcements</p>
+            <form class="space-y-4">
+              <div>
+                <input type="email" placeholder="Your email address" class="w-full bg-dark/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary">
+              </div>
+              <button type="submit" class="w-full bg-primary hover:bg-primary/90 transition-colors rounded-lg px-4 py-3 text-white font-bold">
+                Subscribe Now
+              </button>
+            </form>
+          </div>
+        </div>
+        
+        <div>
+          <div class="bg-gray-blue/30 backdrop-blur-sm rounded-2xl p-8 h-full">
+            <h3 class="text-xl font-bold mb-6 text-white">Send us a Message</h3>
+            <form class="space-y-6">
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-gray-400 mb-2">Name</label>
+                  <input type="text" placeholder="Your name" class="w-full bg-dark/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary">
+                </div>
+                <div>
+                  <label class="block text-gray-400 mb-2">Email</label>
+                  <input type="email" placeholder="Your email" class="w-full bg-dark/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary">
+                </div>
+              </div>
+              <div>
+                <label class="block text-gray-400 mb-2">Subject</label>
+                <input type="text" placeholder="Message subject" class="w-full bg-dark/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-gray-400 mb-2">Message</label>
+                <textarea rows="5" placeholder="Please enter your message..." class="w-full bg-dark/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary"></textarea>
+              </div>
+              <button type="submit" class="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all rounded-lg px-4 py-3 text-white font-bold">
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-blue py-12 relative">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center space-x-2 mb-6">
+            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+              <i class="fa fa-line-chart text-white"></i>
+            </div>
+            <span class="text-xl font-bold text-white">DawnPick</span>
+          </div>
+          <p class="text-gray-400 mb-6">
+            Edge1's first RWA leveraged product on ICP chain, bridging traditional assets to blockchain.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="w-10 h-10 bg-dark/50 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-primary/20 transition-colors">
+              <i class="fa fa-twitter"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-dark/50 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-primary/20 transition-colors">
+              <i class="fa fa-telegram"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-dark/50 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-primary/20 transition-colors">
+              <i class="fa fa-discord"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-dark/50 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-primary/20 transition-colors">
+              <i class="fa fa-github"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-bold mb-6 text-white">Products</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">CFD Trading</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Leverage Details</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Trading Instruments</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Platform Fees</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">API Documentation</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-bold mb-6 text-white">Resources</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Trading Tutorials</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Market Analysis</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQs</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Security Audits</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-bold mb-6 text-white">Legal</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Risk Disclosure</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Legal Disclaimer</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Compliance Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-500 text-sm">© 2025 Edge1</p>
+        <div class="flex space-x-6 mt-4 md:mt-0">
+          <a href="#" class="text-gray-500 hover:text-gray-300 text-sm">Privacy Policy</a>
+          <a href="#" class="text-gray-500 hover:text-gray-300 text-sm">Terms of Service</a>
+          <a href="#" class="text-gray-500 hover:text-gray-300 text-sm">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+      const nav = document.querySelector('nav');
+      if (window.scrollY > 50) {
+        nav.classList.add('bg-dark/95');
+        nav.classList.remove('bg-dark/80');
+      } else {
+        nav.classList.add('bg-dark/80');
+        nav.classList.remove('bg-dark/95');
+      }
+    });
+
+    // FAQ accordion functionality
+    document.querySelectorAll('.faq-toggle').forEach(toggle => {
+      toggle.addEventListener('click', function() {
+        const content = this.nextElementSibling;
+        const icon = this.querySelector('i');
+        
+        if (content.classList.contains('hidden')) {
+          content.classList.remove('hidden');
+          icon.classList.add('rotate-180');
+        } else {
+          content.classList.add('hidden');
+          icon.classList.remove('rotate-180');
+        }
+      });
+    });
+
+    // Number animation
+    function animateValue(id, start, end, duration) {
+      const obj = document.getElementById(id);
+      const range = end - start;
+      const minTimer = 50;
+      let stepTime = Math.abs(Math.floor(duration / range));
+      
+      stepTime = Math.max(stepTime, minTimer);
+      
+      let startTime = new Date().getTime();
+      let endTime = startTime + duration;
+      let timer;
+      
+      function run() {
+        let now = new Date().getTime();
+        let remaining = Math.max((endTime - now) / duration, 0);
+        let value = Math.round(end - (remaining * range));
+        if (id === 'avg-return' || id === 'success-rate') {
+          obj.innerHTML = value + '%';
+        } else if (id === 'trading-volume') {
+          obj.innerHTML = '$' + value.toLocaleString();
+        } else {
+          obj.innerHTML = value.toLocaleString();
+        }
+        if (value == end) {
+          clearInterval(timer);
+        }
+      }
+      
+      timer = setInterval(run, stepTime);
+      run();
+    }
+
+    // Animate numbers when the page loads
+    window.addEventListener('load', function() {
+      // Simulated data
+      setTimeout(() => {
+        animateValue("trade-count", 0, 12543, 2000);
+        animateValue("user-count", 0, 3241, 2000);
+        animateValue("success-rate", 0, 89, 2000);
+        animateValue("total-trades", 0, 25648, 2000);
+        animateValue("active-users", 0, 1532, 2000);
+        animateValue("trading-volume", 0, 4285000, 2000);
+        animateValue("avg-return", 0, 36, 2000);
+      }, 500);
+    });
+
+    // Simulated chart
+    window.addEventListener('load', function() {
+      const ctx = document.createElement('canvas');
+      const chartContainer = document.getElementById('chart-container');
+      chartContainer.appendChild(ctx);
+      
+      const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: 'BTC/USD',
+            data: [42000, 38000, 45000, 39000, 41000, 52000, 48000, 55000, 60000, 58000, 62000, 65000],
+            borderColor: '#0077FF',
+            backgroundColor: 'rgba(0, 119, 255, 0.1)',
+            borderWidth: 2,
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: 'rgba(15, 23, 42, 0.8)',
+              titleColor: '#fff',
+              bodyColor: '#cbd5e1',
+              borderColor: '#0077FF',
+              borderWidth: 1,
+              padding: 12,
+              displayColors: false
+            }
+          },
+          scales: {
+            x: {
+              display: false
+            },
+            y: {
+              display: false
+            }
+          },
+          elements: {
+            point: {
+              radius: 0
+            }
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeOutQuart'
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
